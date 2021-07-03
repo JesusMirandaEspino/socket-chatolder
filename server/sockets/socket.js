@@ -21,6 +21,15 @@ io.on('connection', (client) => {
 
         callback( personas );
     } );
+
+
+    client.on('disconnect', () => {
+        
+        let personaBorrada =  usuarios.borrarPersona( client.id );
+
+        client.broadcast.emit( 'crearMensaje', { usuario: 'Administrador', mensaje: `${personaBorrada.nombre} a abandonado el chat` } );
+
+    });
     
 
 });
