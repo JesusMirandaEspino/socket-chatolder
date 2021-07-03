@@ -29,7 +29,7 @@ socket.on('disconnect', function() {
 
 });
 
-
+/*
 // Enviar información
 socket.emit('enviarMensaje', {
     usuario: 'Fernando',
@@ -37,7 +37,7 @@ socket.emit('enviarMensaje', {
 }, function(resp) {
     console.log('respuesta server: ', resp);
 });
-
+*/
 // Escuchar información
 socket.on('crearMensaje', function(mensaje) {
 

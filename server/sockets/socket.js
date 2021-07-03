@@ -1,5 +1,6 @@
 const { io } = require('../server');
 const { Usuarios } = require('../classes/usuarios');
+const { crearMensaje } =  require('../util/util');
 
 const usuarios = new Usuarios();
 
@@ -25,11 +26,18 @@ io.on('connection', (client) => {
     } );
 
 
+    client.on( 'crearMensaje', (data) => {
+        let persona = usuarios.getPesona( client.id );
+        let mensaje = crearMensaje( persona.nombre, data.mensaje );
+        client.broadcast.emit( 'crearMensaje', mensaje );
+    } );
+
+
     client.on('disconnect', () => {
 
         let personaBorrada =  usuarios.borrarPersona( client.id );
 
-        client.broadcast.emit( 'crearMensaje', { usuario: 'Administrador', mensaje: `${personaBorrada.nombre} a abandonado el chat` } );
+        client.broadcast.emit( 'crearMensaje', crearMensaje( personaBorrada.nombre, `${personaBorrada.nombre} a abandonado el chat` ) );
 
         client.broadcast.emit( 'listaPersona', usuarios.getPeronas() );
 
