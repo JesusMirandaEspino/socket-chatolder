@@ -45,3 +45,12 @@ socket.on('crearMensaje', function(mensaje) {
 
 
 });
+
+
+socket.on('listaPersona', function(personas) {
+
+    console.log('Servidor:', personas);
+
+
+});
+
