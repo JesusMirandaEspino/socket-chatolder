@@ -9,15 +9,17 @@ io.on('connection', (client) => {
     
     client.on( 'entrarChat', (data, callback ) => {
 
-        if( !data.nombre ){
+        if( !data.nombre  || !data.sala ){
             return callback({
                 error: true,
-                msg: 'El nombre es necesario'
+                msg: 'El nombre/sala es necesario'
             });
         }
 
+        client.join( data.sala );
 
-        let personas = usuarios.agregarPersona( client.id, data.nombre);
+
+        let personas = usuarios.agregarPersona( client.id, data.nombre, data.sala);
 
         client.broadcast.emit( 'listaPersona', usuarios.getPeronas() );
 
@@ -46,9 +48,9 @@ io.on('connection', (client) => {
 
 
     //mensajes privados
-    cliente.on( 'mensajePrivado', data => {
+    client.on( 'mensajePrivado', data => {
         let persona = usuarios.getPesona( cliente.id );
-        cliente.broadcast.emit( 'mensajePrivado', crearMensaje( persona.nombre, data.mensaje ) );
+        cliente.broadcast.to(data.para).emit( 'mensajePrivado', crearMensaje( persona.nombre, data.mensaje ) );
     });
     
 
