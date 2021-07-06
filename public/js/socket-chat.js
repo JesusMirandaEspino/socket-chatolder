@@ -39,7 +39,7 @@ socket.emit('enviarMensaje', {
 });
 */
 // Escuchar información
-socket.on('crearMensaje', function(mensaje) {
+socket.on('mensajePrivado', function(mensaje) {
 
     console.log('Servidor:', mensaje);
 
@@ -47,10 +47,16 @@ socket.on('crearMensaje', function(mensaje) {
 });
 
 
+
+//Escuchar cambios en usuarios o cuando un usuario sale o entra
 socket.on('listaPersona', function(personas) {
 
     console.log('Servidor:', personas);
-
-
 });
 
+
+//mensaje privado
+socket.on('mensajePrivado', function(mensaje){
+    console.log( 'mensaje privado', mensaje );
+}
+);
