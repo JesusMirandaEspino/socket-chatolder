@@ -19,19 +19,19 @@ io.on('connection', (client) => {
         client.join( data.sala );
 
 
-        let personas = usuarios.agregarPersona( client.id, data.nombre, data.sala);
+        usuarios.agregarPersona( client.id, data.nombre, data.sala);
 
-        client.broadcast.emit( 'listaPersona', usuarios.getPeronas() );
+        client.broadcast.to(data.sala).emit( 'listaPersona', usuarios.getPersonasSalas( data.sala ) );
 
 
-        callback( personas );
+        callback( usuarios.getPersonasSalas( data.sala ) );
     } );
 
 
     client.on( 'crearMensaje', (data) => {
         let persona = usuarios.getPesona( client.id );
         let mensaje = crearMensaje( persona.nombre, data.mensaje );
-        client.broadcast.emit( 'crearMensaje', mensaje );
+        client.broadcast.to(persona.sala).emit( 'crearMensaje', mensaje );
     } );
 
 
@@ -39,9 +39,9 @@ io.on('connection', (client) => {
 
         let personaBorrada =  usuarios.borrarPersona( client.id );
 
-        client.broadcast.emit( 'crearMensaje', crearMensaje( personaBorrada.nombre, `${personaBorrada.nombre} a abandonado el chat` ) );
+        client.broadcast.to(personaBorrada.sala).emit( 'crearMensaje', crearMensaje( personaBorrada.nombre, `${personaBorrada.nombre} a abandonado el chat` ) );
 
-        client.broadcast.emit( 'listaPersona', usuarios.getPeronas() );
+        client.broadcast.to(personaBorrada.sala).emit( 'listaPersona', usuarios.getPersonasSalas( personaBorrada.sala  ) );
 
     });
 
