@@ -1,5 +1,5 @@
 const socket = io();
-const params = new URLSearchParams( window.location.search );
+let params = new URLSearchParams( window.location.search );
 
 
     if( !params.has('nombre') || !params.has('sala') ){
@@ -18,7 +18,7 @@ socket.on('connect', function() {
     console.log('Conectado al servidor');
 
     socket.emit( 'entrarChat',  usuario, ( resp ) => {
-        console.log( resp );
+        renderizarUsuarios( resp );
     } );
 
 });
@@ -52,7 +52,7 @@ socket.on('mensajePrivado', function(mensaje) {
 //Escuchar cambios en usuarios o cuando un usuario sale o entra
 socket.on('listaPersona', function(personas) {
 
-    console.log('Servidor:', personas);
+    renderizarUsuarios(personas);
 });
 
 
