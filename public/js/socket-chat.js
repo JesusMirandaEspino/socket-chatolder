@@ -33,9 +33,10 @@ socket.on('disconnect', function() {
 
 
 // Escuchar información
-socket.on('mensajePrivado', function(mensaje) {
+socket.on('crearMensaje', function(mensaje) {
 
-    console.log('Servidor:', mensaje);
+    //console.log('Servidor:', mensaje);
+    renderizarMensaje( mensaje, false );
 
 
 });

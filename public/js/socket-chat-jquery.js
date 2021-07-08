@@ -6,7 +6,7 @@ const formEnviar = $('#formEnviar');
 const txtMensaje = $('#txtMensaje');
 const nombre = param.get('nombre');
 const sala = param.get('sala');
-const divChatbox = $('divChatbox');
+const divChatbox = document.querySelector('#divChatbox');
 
 //referencias
 
@@ -33,20 +33,36 @@ const renderizarUsuarios = ( personas ) => {
 }
 
 
-function renderizarMensaje( mensaje ){
+function renderizarMensaje( mensaje, yo ){
 
     let html = '';
+    let fecha = new Date( mensaje.fecha );
+    let hora = fecha.getHours() +  ':' +fecha.getMinutes();
+    
 
-        html += `<li>`;
-        html += `<div class="chat-img"><img src="assets/images/users/1.jpg" alt="user" /></div>`;
-        html += `<li>`;
-        html += ` <h5>${mensaje.nombre}</h5>`;
-        html += ` <div class="box bg-light-info">${mensaje.mensaje}</div>`;
-        html += ` </div>`;
-        html += ` <div class="chat-time">10:56 am</div>`;
-        html += ` </li>`;
+        if(yo){
+            html += `<li class="reverse">`;
+            html += `<div class="chat-content">`;
+            html += `<h5>${mensaje.nombre}</h5>`;
+            html += `<div class="box bg-light-inverse">${mensaje.mensaje}</div>`;
+            html += `</div>`;
+            html += `<div class="chat-img"><img src="assets/images/users/5.jpg" alt="user" /></div>`;
+            html += `<div class="chat-time">${hora}</div>`;
+            html += `</li>`;
+        }else{
+            html += `<li>`;
+            html += `<div class="chat-img"><img src="assets/images/users/1.jpg" alt="user" /></div>`;
+            html += `<li>`;
+            html += ` <h5>${mensaje.nombre}</h5>`;
+            html += ` <div class="box bg-light-info">${mensaje.mensaje}</div>`;
+            html += ` </div>`;
+            html += ` <div class="chat-time">${hora}</div>`;
+            html += ` </li>`;
+        }
 
-    divChatbox.append(html);
+        console.log( divChatbox );
+
+    divChatbox.html(html);
 
 }
 
@@ -77,9 +93,10 @@ formEnviar.on( 'click', function(e){
     socket.emit('crearMensaje', {
         usuario: nombre,
         mensaje: txtMensaje.val()
-    }, function(mensaje) {
+    }, function( mensaje ) {
         txtMensaje.val('').focus();
-        renderizarMensaje( mensaje );
+        renderizarMensaje( mensaje, true );
+        console.log('hola');
     });
 
 } );

@@ -23,7 +23,7 @@ io.on('connection', (client) => {
 
         client.broadcast.to(data.sala).emit( 'listaPersona', usuarios.getPersonasSalas( data.sala ) );
 
-
+        client.broadcast.to(data.sala).emit( 'crearMensaje', crearMensaje( data.nombre, `${data.nombre} se unio al chat el chat` ) );
         callback( usuarios.getPersonasSalas( data.sala ) );
     } );
 
@@ -32,6 +32,7 @@ io.on('connection', (client) => {
         let persona = usuarios.getPesona( client.id );
         let mensaje = crearMensaje( persona.nombre, data.mensaje );
         client.broadcast.to(persona.sala).emit( 'crearMensaje', mensaje );
+
         callback( mensaje );
     } );
 
