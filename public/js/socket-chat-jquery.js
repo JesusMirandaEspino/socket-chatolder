@@ -4,8 +4,9 @@ const divUsuario = document.querySelector('#divUsuarios');
 const divUsuarios = $( '#divUsuarios' );
 const formEnviar = $('#formEnviar');
 const txtMensaje = $('#txtMensaje');
-let nombre = param.get('nombre');
-let sala = param.get('sala');
+const nombre = param.get('nombre');
+const sala = param.get('sala');
+const divChatbox = $('divChatbox');
 
 //referencias
 
@@ -28,6 +29,24 @@ const renderizarUsuarios = ( personas ) => {
     }
 
     divUsuarios.html( html );
+
+}
+
+
+function renderizarMensaje( mensaje ){
+
+    let html = '';
+
+        html += `<li>`;
+        html += `<div class="chat-img"><img src="assets/images/users/1.jpg" alt="user" /></div>`;
+        html += `<li>`;
+        html += ` <h5>${mensaje.nombre}</h5>`;
+        html += ` <div class="box bg-light-info">${mensaje.mensaje}</div>`;
+        html += ` </div>`;
+        html += ` <div class="chat-time">10:56 am</div>`;
+        html += ` </li>`;
+
+    divChatbox.append(html);
 
 }
 
@@ -58,8 +77,9 @@ formEnviar.on( 'click', function(e){
     socket.emit('crearMensaje', {
         usuario: nombre,
         mensaje: txtMensaje.val()
-    }, function(resp) {
-        console.log('respuesta server: ', resp);
+    }, function(mensaje) {
+        txtMensaje.val('').focus();
+        renderizarMensaje( mensaje );
     });
 
 } );
