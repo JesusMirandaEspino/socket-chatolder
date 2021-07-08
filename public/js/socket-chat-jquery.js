@@ -2,6 +2,10 @@
 let param = new URLSearchParams( window.location.search );
 const divUsuario = document.querySelector('#divUsuarios');
 const divUsuarios = $( '#divUsuarios' );
+const formEnviar = $('#formEnviar');
+const txtMensaje = $('#txtMensaje');
+let nombre = param.get('nombre');
+let sala = param.get('sala');
 
 //referencias
 
@@ -26,3 +30,36 @@ const renderizarUsuarios = ( personas ) => {
     divUsuarios.html( html );
 
 }
+
+
+// Listener
+
+divUsuarios.on( 'click', 'a', function(){
+    const id = $(this).data( 'id' );
+
+    if( id ){
+        console.log( id );
+    }
+
+} );
+
+
+formEnviar.on( 'click', function(e){
+    e.preventDefault();
+
+    if( txtMensaje.val().trim().length === 0 ){
+        return;
+    }
+
+    console.log( txtMensaje.val() );
+
+
+// Enviar información
+    socket.emit('crearMensaje', {
+        usuario: nombre,
+        mensaje: txtMensaje.val()
+    }, function(resp) {
+        console.log('respuesta server: ', resp);
+    });
+
+} );
